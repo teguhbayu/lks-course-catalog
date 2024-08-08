@@ -7,14 +7,14 @@ const cookieParser = require("cookie-parser");
 const morgan = require("morgan");
 const fs = require("fs");
 const path = require("path");
-const env = require("./env");
+require("dotenv").config();
 
 awsParamEnv.load(`/course-catalog/${process.env.NODE_ENV}`, {
-   credentials: {
-      accessKeyId: process.env.AWS_ACCESS_KEY,
-      secretAccessKey: process.env.AWS_SECRET_KEY,
-   },
-   region: "us-east-1",
+  credentials: {
+    accessKeyId: process.env.AWS_ACCESS_KEY,
+    secretAccessKey: process.env.AWS_SECRET_KEY,
+  },
+  region: "us-east-1",
 });
 
 const app = express();
@@ -30,43 +30,43 @@ app.use(express.raw());
 app.use("/public", express.static(__dirname + "/public")); // Public directory
 
 /* Start Logging */
-const log_path = env.log_path || path.join(__dirname, "logs");
+const log_path = process.env.log_path || path.join(__dirname, "logs");
 
 // if log path not exist, log_path folder will be created
 if (!fs.existsSync(log_path)) {
-   fs.mkdirSync(log_path, { recursive: true });
+  fs.mkdirSync(log_path, { recursive: true });
 }
 
 // Log all error requests status
 app.use(
-   morgan("combined", {
-      skip: (req, res) => {
-         return res.statusCode < 400;
-      },
-      stream: fs.createWriteStream(path.join(log_path, "error.log"), {
-         flags: "a",
-      }),
-   })
+  morgan("combined", {
+    skip: (req, res) => {
+      return res.statusCode < 400;
+    },
+    stream: fs.createWriteStream(path.join(log_path, "error.log"), {
+      flags: "a",
+    }),
+  })
 );
 
 // Log all success request status
 app.use(
-   morgan("combined", {
-      skip: (req, res) => {
-         return res.statusCode > 400;
-      },
-      stream: fs.createWriteStream(path.join(log_path, "access.log"), {
-         flags: "a",
-      }),
-   })
+  morgan("combined", {
+    skip: (req, res) => {
+      return res.statusCode > 400;
+    },
+    stream: fs.createWriteStream(path.join(log_path, "access.log"), {
+      flags: "a",
+    }),
+  })
 );
 /* End Logging */
 
 /* Dynamic CORS */
 app.use(
-   cors({
-      origin: "*",
-   })
+  cors({
+    origin: "*",
+  })
 );
 /* End Dynamic CORS */
 
@@ -83,7 +83,7 @@ courseRoute(app);
 /* Check database connection */
 
 app.listen(port, () => {
-   console.log(`Server API listen on port ${port}`);
+  console.log(`Server API listen on port ${port}`);
 });
 
 module.exports = app;
