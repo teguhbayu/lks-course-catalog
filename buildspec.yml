@@ -5,6 +5,7 @@ env:
     ECR_REPO: 852976468951.dkr.ecr.us-east-1.amazonaws.com
     ECR_REGION: us-east-1
     CONTAINER_NAME: lks-catalog-app
+    CONTAINERTD: lks-catalog-container
     AWS_ACCESS_KEY: $Access_Key
     AWS_SECRET_KEY: $Secret_Key
 
@@ -23,7 +24,7 @@ phases:
     commands:
       - echo "push the image to ECR."
       - docker push $ECR_REPO/$CONTAINER_NAME:latest
-      - printf '[{"name":"%s", "imageUri":"%s"}]' $CONTAINER_NAME $ECR_REPO/$CONTAINER_NAME:latest > imagedefinitions.json
+      - printf '[{"name":"%s", "imageUri":"%s"}]' $CONTAINERTD $ECR_REPO/$CONTAINER_NAME:latest > imagedefinitions.json
       - echo "buildcomplete..."
 
 reports:
