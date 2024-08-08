@@ -7,7 +7,7 @@ const cookieParser = require("cookie-parser");
 const morgan = require("morgan");
 const fs = require("fs");
 const path = require("path");
-require("dotenv").config();
+const env = require("./env");
 
 awsParamEnv.load(`/course-catalog/${process.env.NODE_ENV}`, {
   credentials: {
@@ -30,7 +30,7 @@ app.use(express.raw());
 app.use("/public", express.static(__dirname + "/public")); // Public directory
 
 /* Start Logging */
-const log_path = process.env.log_path || path.join(__dirname, "logs");
+const log_path = env.log_path || path.join(__dirname, "logs");
 
 // if log path not exist, log_path folder will be created
 if (!fs.existsSync(log_path)) {

@@ -6,8 +6,8 @@ env:
     ECR_REGION: us-east-1
     CONTAINER_NAME: lks-catalog-app
     CONTAINERTD: lks-catalog-container
-    AWS_ACCESS_KEY: $Access_Key
-    AWS_SECRET_KEY: $Secret_Key
+    ACCESS_KEY: $Access_Key
+    SECRET_KEY: $Secret_Key
 
 phases:
   pre_build:
@@ -17,6 +17,9 @@ phases:
   build:
     commands:
       - echo "run test and build docker"
+      - |
+        echo "AWS_ACCESS_KEY=$ACCESS_KEY
+        AWS_SECRET_KEY=$SECRET_KEY" >> .env.production
       - docker build -t $CONTAINER_NAME .
       - docker tag $CONTAINER_NAME:latest $ECR_REPO/$CONTAINER_NAME:latest
 
