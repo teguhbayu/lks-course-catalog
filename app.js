@@ -83,7 +83,7 @@ courseRoute(app);
 /* Check database connection */
 
 app.listen(port, () => {
-  console.log(`Server API listen on port ${port}`);
+  console.log(`Server API listen on ports ${port}`);
 });
 
 module.exports = app;
